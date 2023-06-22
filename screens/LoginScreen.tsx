@@ -1,22 +1,21 @@
 import { View, Text, Image , StyleSheet, ImageBackground, Dimensions, Button, TouchableOpacity} from 'react-native'
-import React, {useLayoutEffect} from 'react'
-import {useNavigation} from '@react-navigation/core'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyles } from '../shared/globalStyles'
 import TextInputLeftIcon from '../shared/TextInputLeftIcon'
+import ImageButton from '../shared/ImageButton'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootParamList } from '../RootParamList'
 
 const {height}=Dimensions.get('window')
 
-const LoginScreen = () => {
+const LoginScreen = (props:NativeStackScreenProps<RootParamList, 'login'>) => {
 
-    const navigation = useNavigation()
+    const navigation = props.navigation
 
-    useLayoutEffect(() => {
-      navigation.setOptions({
-        headerShown:false
-      })
-    
-    }, [])
+    const navigateToForgot=()=>{
+        navigation.navigate('forgotPassword', {username:'rindra'})
+    }
 
   return (
     <SafeAreaView style={styles.view}>
@@ -39,11 +38,8 @@ const LoginScreen = () => {
                     autoCorrect={false}
                     secureTextEntry
                     />
-                <TouchableOpacity style={styles.forgot}>
-                    <Text style={{             
-                        fontWeight:'bold',
-                        color:'#1198f7'
-                    }}>forgot?</Text>
+                <TouchableOpacity style={styles.forgot} onPress={navigateToForgot}>
+                    <Text style={styles.blueBold}>forgot?</Text>
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={{
@@ -61,16 +57,32 @@ const LoginScreen = () => {
         </View>
       </View>
       <View style={{
-        marginTop:7,
-        alignItems:'center'
+        marginTop:0,
+        alignItems:'center',
+        flex:1,
       }}>
         <Text style={[
             globalStyles.boldLabel,
             {
-                fontSize:20,
+                fontSize:18,
                 color:'#6d6d6e',
             },
         ]}>Or</Text>
+        <View style={{
+            flexDirection:'row',
+        }}>
+            <ImageButton source={require("../images/google.png")} style={{marginRight:15}}/>
+            <ImageButton source={require("../images/facebook.png")}/>
+        </View>
+        <View style={{
+            marginTop:10,
+            flexDirection:'row',
+        }}>
+            <Text>Don't have an account?</Text>
+            <TouchableOpacity style={{marginLeft:5}} onPress={()=>navigation.navigate('register')}>
+                <Text style={styles.blueBold}>Sign up</Text>
+            </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -96,6 +108,10 @@ const styles=StyleSheet.create({
         position:'absolute',
         right:0,
         bottom:8,
+    },
+    blueBold:{             
+        fontWeight:'bold',
+        color:'#1198f7'
     }
 })
 

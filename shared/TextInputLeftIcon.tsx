@@ -1,9 +1,9 @@
 import { View, Text, TextInput , StyleSheet, TextInputProps} from 'react-native'
 import React from 'react'
-import {Ionicons, Entypo} from '@expo/vector-icons'
+import {Ionicons, Entypo, MaterialIcons} from '@expo/vector-icons'
 
 type TextInputLeftIconProps={
-    name:keyof typeof Ionicons["glyphMap"] | keyof typeof Entypo["glyphMap"]
+    name:keyof typeof Ionicons["glyphMap"] | keyof typeof Entypo["glyphMap"] | keyof typeof MaterialIcons["glyphMap"]
 }&TextInputProps
 
 const TextInputLeftIcon = (props:TextInputLeftIconProps) => {
