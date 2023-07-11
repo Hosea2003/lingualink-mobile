@@ -5,13 +5,14 @@ import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datet
 
 type DatePickerInputProps={
     placeholder?:string
+    minDate?:Date
 }
 
 const DatePickerInput = ({placeholder, ...props}:DatePickerInputProps) => {
 
   const todayYear = new Date()
 
-  const [date, setDate]=useState(new Date(todayYear.getFullYear()-11, todayYear.getMonth(), todayYear.getDay()))
+  const [date, setDate]=useState(props.minDate ? props.minDate:new Date())
   const [show, setShow]=useState(false)
 
   const togglePicker=()=>{
@@ -22,13 +23,15 @@ const DatePickerInput = ({placeholder, ...props}:DatePickerInputProps) => {
     const type = event.type
     if(type=="set"){
       selectedDate && setDate(selectedDate)
+      togglePicker()
     }
   }
 
   return (
     <View>
       <Pressable onPress={()=>togglePicker()}>
-        <TextInputLeftIcon name='date-range' placeholder={placeholder} editable={false}/>
+        <TextInputLeftIcon name='date-range' placeholder={placeholder} editable={false}
+          value={date.toDateString()}/>
       </Pressable>
       {show && <DateTimePicker 
           mode='date' 

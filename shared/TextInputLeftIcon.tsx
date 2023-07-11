@@ -9,15 +9,23 @@ type TextInputLeftIconProps={
 const TextInputLeftIcon = (props:TextInputLeftIconProps) => {
 
   const isIonicon=props.name in Ionicons.glyphMap
+  const isMaterial= props.name in MaterialIcons.glyphMap
   const name =props.name
 
   return (
     <View style={styles.container}>
-        {isIonicon ? (
+        {isIonicon && !isMaterial &&(
           <Ionicons name={name as keyof typeof Ionicons.glyphMap} size={25} color={"#cfdce8"}/>
-        ): (
+        )}
+        {!isIonicon && !isMaterial && (
           <Entypo name={name as keyof typeof Entypo.glyphMap} size={25} color={"#cfdce8"}/>
         )}
+        {
+          !isIonicon && isMaterial && (
+            <MaterialIcons name={name as keyof typeof MaterialIcons.glyphMap} size={25}
+            color={"#cfdce8"}/>
+          )
+        }
         <TextInput 
           style={styles.input}
           {...props}/>

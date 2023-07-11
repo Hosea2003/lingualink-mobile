@@ -1,11 +1,13 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView } from 'react-native'
 import React from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 const HomeScreen = () => {
+
   return (
-    <View>
+    <SafeAreaView>
       <Text>HomeScreen</Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

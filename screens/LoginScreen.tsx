@@ -1,20 +1,52 @@
 import { View, Text, Image , StyleSheet, ImageBackground, Dimensions, Button, TouchableOpacity} from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyles } from '../shared/globalStyles'
 import TextInputLeftIcon from '../shared/TextInputLeftIcon'
 import ImageButton from '../shared/ImageButton'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootParamList } from '../RootParamList'
+import { useAuth } from '../hooks/useAuth'
+import axios from 'axios'
+import { Token } from '../types/types'
+import { API_URI } from '../const/API'
 
 const {height}=Dimensions.get('window')
 
 const LoginScreen = (props:NativeStackScreenProps<RootParamList, 'login'>) => {
 
+    const [credentials, setCredentials]=useState({
+        username:'',
+        password:''
+    })
+
+    const {saveToken}=useAuth()
+
     const navigation = props.navigation
 
     const navigateToForgot=()=>{
         navigation.navigate('forgotPassword', {username:'rindra'})
+    }
+
+    const login=async ()=>{
+        try{
+            const {data, status}=await axios.post<Token>(
+                API_URI+"/user/get-token/",
+                credentials,
+                {
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Accept':'application/json'
+                    }
+                }
+            )
+
+            saveToken(data)
+            navigation.navigate('home')
+        }
+        catch{
+            console.log('error')
+        }
     }
 
   return (
@@ -30,13 +62,15 @@ const LoginScreen = (props:NativeStackScreenProps<RootParamList, 'login'>) => {
             <Text style={globalStyles.boldLabel}>Login here</Text>
             <TextInputLeftIcon 
                 name='email' 
-                placeholder='Your email'/>
+                placeholder='Your email'
+                onChangeText={(value)=>setCredentials({...credentials, username:value})}/>
             <View style={styles.password}>
                 <TextInputLeftIcon 
                     name='lock-closed-outline'
                     placeholder='Your password'
                     autoCorrect={false}
                     secureTextEntry
+                    onChangeText={(value)=>setCredentials({...credentials, password:value})}
                     />
                 <TouchableOpacity style={styles.forgot} onPress={navigateToForgot}>
                     <Text style={styles.blueBold}>forgot?</Text>
@@ -48,7 +82,9 @@ const LoginScreen = (props:NativeStackScreenProps<RootParamList, 'login'>) => {
                 marginTop:10,
                 alignItems:'center',
                 borderRadius:10
-            }}>
+            }}
+                onPress={()=>login()}
+            >
                 <Text style={{
                     color:'white', 
                     fontSize:16

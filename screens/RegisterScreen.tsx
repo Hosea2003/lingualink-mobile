@@ -10,6 +10,10 @@ const {height}=Dimensions.get('window')
 
 
 const RegisterScreen = () => {
+
+    const today=new Date()
+    const minBirthday=new Date(today.getFullYear()-12, today.getMonth(), today.getDay())
+
   return (
     <View style={{
         flex:1,
@@ -41,6 +45,8 @@ const RegisterScreen = () => {
                 <TextInputLeftIcon name='lock-closed-outline' placeholder='Confirm' secureTextEntry/>
                 <TextInputLeftIcon name='user' placeholder='First name'/>
                 <TextInputLeftIcon name='user' placeholder='Last name'/>
+                <DatePickerInput placeholder='Birthdate'
+                    minDate={minBirthday}/>
                 <RoundedButton text='Register' style={{marginTop:10}}/>    
             </ScrollView>
         </View>
